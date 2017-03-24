@@ -20,6 +20,10 @@ limitations under the License.
 #include <set>
 #include <string>
 
+#if defined(PLATFORM_WINDOWS)
+#include "tensorflow/core/platform/windows/cpu_info.h"
+#include "tensorflow/core/platform/windows/intrinsics_port.h"
+#endif
 #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 // Disable clang-format to prevent 'FixedPoint' header from being included
 // before 'Tensor' header on which it depends.

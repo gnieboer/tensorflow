@@ -30,6 +30,11 @@
 
 #include "src/FixedPoint/FixedPointTypes.h"
 
+#if defined(PLATFORM_WINDOWS)
+#include "tensorflow/core/platform/windows/cpu_info.h"
+#include "tensorflow/core/platform/windows/intrinsics_port.h"
+#endif
+
 // Use optimized implementations whenever available
 #if defined (EIGEN_VECTORIZE_AVX512DQ) || defined (EIGEN_VECTORIZE_AVX512BW)
 #include "src/FixedPoint/PacketMathAVX512.h"
