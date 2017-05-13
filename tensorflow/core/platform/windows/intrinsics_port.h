@@ -44,6 +44,9 @@ _mm256_extract_epi16(__m256i a, const int i)
 	return a.m256i_i16[i & 7];
 }
 
+static inline __m256i
+_mm256_insert_epi32(__m256i a, int b, const int i)
+{
   __m256i c = a;
   c.m256i_i32[i & 7] = b;
   return c;
