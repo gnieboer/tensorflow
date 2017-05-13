@@ -725,6 +725,8 @@ if(WIN32)
         $<$<BOOL:${tensorflow_ENABLE_GPU}>:$<TARGET_OBJECTS:tf_stream_executor>>
     )
     
+	set_target_properties(pywrap_tensorflow_internal_static PROPERTIES LINKER_LANGUAGE CXX)
+	
     target_include_directories(pywrap_tensorflow_internal_static PUBLIC
         ${PYTHON_INCLUDE_DIR}
         ${NUMPY_INCLUDE_DIR}
