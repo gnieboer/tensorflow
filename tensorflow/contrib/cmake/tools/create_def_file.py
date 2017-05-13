@@ -88,6 +88,10 @@ def get_args():
   args = parser.parse_args()
   return args
 
+def read_as_utf8(fileno):
+  fp = io.open(fileno, mode="r", encoding="utf-8", closefd=False)
+  print(fp.read())
+  fp.close()
 
 def main():
   """main."""
@@ -99,15 +103,18 @@ def main():
   candidates = []
   tmpfile = tempfile.NamedTemporaryFile(mode="w", delete=False)
   for lib_path in args.input:
-    proc = subprocess.Popen([DUMPBIN, "/nologo", "/linkermember:1", lib_path],
-                            stdout=subprocess.PIPE)
-    for line in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
-      cols = line.split()
-      if len(cols) < 2:
-        continue
-      sym = cols[1]
-      tmpfile.file.write(sym + "\n")
-      candidates.append(sym)
+    print("{} target, {}".format(DUMPBIN, lib_path))  
+    proc = subprocess.Popen([DUMPBIN, "/nologo", "/linkermember:1", lib_path], stdout=subprocess.PIPE)
+    fp = io.open(proc.stdout.fileno(), mode="r", encoding="utf-8", closefd=False)
+    mystr = fp.read()
+    fp.close()
+    for line in mystr.splitlines():
+	  cols = line.split()
+	  if len(cols) < 2:
+	    continue
+	  sym = cols[1]
+	  tmpfile.file.write(sym + "\n")
+	  candidates.append(sym)
     exit_code = proc.wait()
     if exit_code != 0:
       print("{} failed, exit={}".format(DUMPBIN, exit_code))
@@ -129,7 +136,10 @@ def main():
     # We compare on undname but use the decorated name from candidates.
     dupes = 0
     proc = subprocess.Popen([UNDNAME, tmpfile.name], stdout=subprocess.PIPE)
-    for idx, line in enumerate(io.TextIOWrapper(proc.stdout, encoding="utf-8")):
+    fp = io.open(proc.stdout.fileno(), mode="r", encoding="utf-8", closefd=False)
+    mystr = fp.read()
+    fp.close()
+    for idx, line in enumerate(mystr.splitlines()):
       decorated = candidates[idx]
       if decorated in taken:
         # Symbol is already in output, done.
