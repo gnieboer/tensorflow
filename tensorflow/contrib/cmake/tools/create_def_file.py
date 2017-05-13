@@ -79,7 +79,7 @@ def main():
   # a temp file.
   candidates = []
   tmpfile = tempfile.NamedTemporaryFile(mode="w", delete=False)
-  proc = subprocess.Popen([DUMPBIN, "/nologo", "/linkermember:1", args.input],
+  proc = subprocess.Popen([DUMPBIN, "/nologo", "/linkermember:1", args.input], stdout=subprocess.PIPE)
   fp = io.open(proc.stdout.fileno(), mode="r", encoding="utf-8", closefd=False)
   mystr = fp.read()
   fp.close()
