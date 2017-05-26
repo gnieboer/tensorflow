@@ -711,6 +711,7 @@ if(WIN32)
     #
     add_library(pywrap_tensorflow_internal_static STATIC
         ${pywrap_tensorflow_internal_src}
+        $<TARGET_OBJECTS:tf_c>
         $<TARGET_OBJECTS:tf_core_lib>
         $<TARGET_OBJECTS:tf_core_cpu>
         $<TARGET_OBJECTS:tf_core_framework>
@@ -758,6 +759,7 @@ endif(WIN32)
 # tf_python/tensorflow/python/.
 add_library(pywrap_tensorflow_internal SHARED
     ${pywrap_tensorflow_internal_src}
+    $<TARGET_OBJECTS:tf_c>
     $<TARGET_OBJECTS:tf_core_lib>
     $<TARGET_OBJECTS:tf_core_cpu>
     $<TARGET_OBJECTS:tf_core_framework>
